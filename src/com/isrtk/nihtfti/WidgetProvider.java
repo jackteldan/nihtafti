@@ -17,45 +17,42 @@ package com.isrtk.nihtfti;
 
 
 
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
-import android.net.Uri;
+
+import android.widget.ImageView;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 public class WidgetProvider extends AppWidgetProvider {
-  public static String EXTRA_WORD=
-    "com.commonsware.android.appwidget.lorem.WORD";
+	
+	
+	@Override
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+			int[] appWidgetIds) {
 
-  @Override
-  public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
-                        int[] appWidgetIds) {
-    for (int i=0; i<appWidgetIds.length; i++) {
-      Intent svcIntent=new Intent(ctxt, WidgetService.class);
-      
-      svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-      svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-      
-      RemoteViews widget=new RemoteViews(ctxt.getPackageName(),
-                                        R.layout.widget);
-      
-      widget.setRemoteAdapter(appWidgetIds[i], R.id.words,
-                              svcIntent);
+		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
+		remoteViews.setOnClickPendingIntent(R.id.emergencyButton, buildButtonPendingIntent(context));
 
-      Intent clickIntent=new Intent(ctxt, NihtaftiActivity.class);
-      PendingIntent clickPI=PendingIntent
-                              .getActivity(ctxt, 0,
-                                            clickIntent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT);
-      
-      widget.setPendingIntentTemplate(R.id.words, clickPI);
+		pushWidgetUpdate(context, remoteViews);
+	}
 
-      appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
-    }
-    
-    super.onUpdate(ctxt, appWidgetManager, appWidgetIds);
-  }
+	public static PendingIntent buildButtonPendingIntent(Context context) {
+		Intent intent = new Intent();
+	    intent.setAction("com.isrtk.intent.action.EMERGENCY_PRESSED");
+	    return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	}
+
+	public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {
+		ComponentName myWidget = new ComponentName(context, NihtftiActivity.class);
+	    AppWidgetManager manager = AppWidgetManager.getInstance(context);
+	    manager.updateAppWidget(myWidget, remoteViews);		
+	}
+	
 }
+
