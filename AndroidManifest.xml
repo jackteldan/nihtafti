@@ -13,33 +13,26 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-
-
-
-    
-        
-      <receiver 
+        <activity android:label="@string/app_name"
+              android:name="com.isrtk.nihtfti.NihtaftiActivity"
+              android:theme="@android:style/Theme.NoDisplay">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+      <receiver android:icon="@drawable/cw"
               android:label="@string/app_name"
-              android:name="WidgetProvider">
-      			<intent-filter>
-        				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-      			</intent-filter>
-      					<meta-data android:name="android.appwidget.provider"
-        	         	android:resource="@xml/widget_provider" />
+              android:name="com.isrtk.nihtfti.WidgetProvider">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/widget_provider" />
     </receiver>
- 	<receiver
- 	     android:label="widgetBroadcastReceiver" 
- 	     android:name="NihtftiActivity">
-	<intent-filter>
-			<action android:name="com.isrtk.intent.action.EMERGENCY_PRESSED"/>
-
-</intent-filter>
-
-<meta-data android:name="android.appwidget.provider"
-     android:resource="@xml/widget_provider"/>
-
-</receiver>
-	
-	
-  </application>
-`</manifest>
+    <service android:name="com.isrtk.nihtfti.WidgetService"
+             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".MainService" />
+    </application>
+        
+</manifest>
