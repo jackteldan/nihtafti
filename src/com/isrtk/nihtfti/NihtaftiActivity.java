@@ -2,6 +2,7 @@
 package com.isrtk.nihtfti;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,11 +15,12 @@ public class NihtaftiActivity extends Activity {
   @Override
   public void onCreate(Bundle state) {
     super.onCreate(state);
-        Log.v("Activity", "onCreate");
+       Log.v("Activity", "onCreate");
 
-      mToastText = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
       Long timeLastClicked = DataHelper.contextReadLong(this,"timeLastClicked");
+
+
 
     if(timeLastClicked == 0) {
         firstClick();
@@ -37,47 +39,32 @@ public class NihtaftiActivity extends Activity {
 
 
     private void firstClick() {
-        Log.v("Activity", "firstClick");
-        Log.v("Activity", "Toast");
 
         DataHelper.contextWriteLong(this,"timeLastClicked",System.currentTimeMillis());
-        DataHelper.contextWriteInt(this, "clickValue", 1);
-        displayText("5");
+        DataHelper.contextWriteInt(this, "clickValue", 0);
+
+        Intent newIntent = new Intent(this, MainService.class);
+        newIntent.putExtra("clickValue", 0);
+        startService(newIntent);
+
 
     }
 
     private void moreClick() {
-        Log.v("Activity", "moreClick");
 
         int clickValue = DataHelper.contextReadInt(this,"clickValue");
-      //  if (clickValue == maxClick) {
-       //     callNihtafti();
-      //  } else {
-            Log.v("Activity", "Toast");
+        DataHelper.contextWriteInt(this, "clickValue", clickValue + 1);
 
-            DataHelper.contextWriteInt(this, "clickValue", clickValue + 1);
-               displayText("" + (maxClick - clickValue));
-      //  }
+        Intent newIntent = new Intent(this, MainService.class);
+        newIntent.putExtra("clickValue",  clickValue + 1);
+        startService(newIntent);
 
     }
 
-    private void displayText(final String message) {
-       mToastText.cancel();
-        mToastText = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        mToastText.setText(message);
-        mToastText.show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.v("Activity", "onDestroy");
-
-    }
-
-    private void callNihtafti() {
 
 
-    }
+
+
+
 
 }

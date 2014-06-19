@@ -17,9 +17,9 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.v("WidgetIntentReceiver" , "RECIVED");
 
-        Intent intent2 = new Intent(context, NihtaftiActivity.class);
-        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent2);
+        Intent newIntent = new Intent(context, NihtaftiActivity.class);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(newIntent);
 
         //if(intent.getAction().equals("pl.looksok.intent.action.CHANGE_PICTURE")){
             updateWidgetPictureAndButtonListener(context);
