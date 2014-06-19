@@ -46,7 +46,7 @@ public class MainService extends Service {
             public void run() {
                 Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(),"timeLastClicked");
 
-                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
+                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
                     MainService.this.stopSelf();
                 }
             }
@@ -55,9 +55,11 @@ public class MainService extends Service {
 
         clickValue = intent.getIntExtra("clickValue", 0);
 
-        if (clickValue >= maxClick) {
-            startAction = true;
-            startToWork();
+        if (clickValue >= maxClick ) {
+            if (!startAction) {
+                startToWork();
+                startAction = true;
+            }
         } else {
             displayText("" + (maxClick - clickValue));
 
