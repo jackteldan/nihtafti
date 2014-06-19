@@ -8,7 +8,6 @@
         android:targetSdkVersion="19" />
 
     <application
-        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -21,18 +20,30 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-      <receiver android:icon="@drawable/cw"
-              android:label="@string/app_name"
-              android:name="com.isrtk.nihtfti.WidgetProvider">
-      <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-      </intent-filter>
-      <meta-data android:name="android.appwidget.provider"
-                 android:resource="@xml/widget_provider" />
-    </receiver>
-    <service android:name="com.isrtk.nihtfti.WidgetService"
-             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name=".MainService" />
+
+
+        <receiver android:name="WidgetProvider" >
+            <intent-filter >
+                <action
+                    android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
+
+        <receiver
+            android:name="WidgetIntentReceiver"
+            android:label="widgetBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="pl.looksok.intent.action.CHANGE_PICTURE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
     </application>
         
 </manifest>

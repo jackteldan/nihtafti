@@ -17,42 +17,43 @@ package com.isrtk.nihtfti;
 
 
 
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
-
-import android.widget.ImageView;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
+
 
 public class WidgetProvider extends AppWidgetProvider {
-	
-	
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) {
 
-		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-		remoteViews.setOnClickPendingIntent(R.id.emergencyButton, buildButtonPendingIntent(context));
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+                         int[] appWidgetIds) {
 
-		pushWidgetUpdate(context, remoteViews);
-	}
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
+        remoteViews.setOnClickPendingIntent(R.id.widget_image, buildButtonPendingIntent(context));
 
-	public static PendingIntent buildButtonPendingIntent(Context context) {
-		Intent intent = new Intent();
-	    intent.setAction("com.isrtk.intent.action.EMERGENCY_PRESSED");
-	    return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-	}
+        pushWidgetUpdate(context, remoteViews);
 
-	public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {
-		ComponentName myWidget = new ComponentName(context, NihtftiActivity.class);
-	    AppWidgetManager manager = AppWidgetManager.getInstance(context);
-	    manager.updateAppWidget(myWidget, remoteViews);		
-	}
-	
+        Log.v("PROVICER", "onUpdate");
+
+    }
+
+    public static PendingIntent buildButtonPendingIntent(Context context) {
+        Intent intent = new Intent();
+        intent.setAction("pl.looksok.intent.action.CHANGE_PICTURE");
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {
+        ComponentName myWidget = new ComponentName(context, WidgetProvider.class);
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        manager.updateAppWidget(myWidget, remoteViews);
+    }
 }
+
 
