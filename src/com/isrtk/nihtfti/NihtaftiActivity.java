@@ -8,8 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class NihtaftiActivity extends Activity {
-  public static final int timeToZero = 30; // [s]
-  public static final int maxClick = 5;
+
 
     public static Toast     mToastText;
   @Override
@@ -25,14 +24,12 @@ public class NihtaftiActivity extends Activity {
     if(timeLastClicked == 0) {
         firstClick();
     } else {
-        if (timeLastClicked + timeToZero * 1000 < System.currentTimeMillis()) {
+        if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
             firstClick();
         } else {
             moreClick();
         }
     }
-
-
 
     finish();
   }
@@ -54,6 +51,7 @@ public class NihtaftiActivity extends Activity {
 
         int clickValue = DataHelper.contextReadInt(this,"clickValue");
         DataHelper.contextWriteInt(this, "clickValue", clickValue + 1);
+        DataHelper.contextWriteLong(this,"timeLastClicked",System.currentTimeMillis());
 
         Intent newIntent = new Intent(this, MainService.class);
         newIntent.putExtra("clickValue",  clickValue + 1);

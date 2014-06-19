@@ -2,6 +2,7 @@ package com.isrtk.nihtfti;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,11 +14,13 @@ import java.util.Timer;
  */
 public class MainService extends Service {
 
-    int lastClickValue = -1;
+    public boolean startAction = false;
     int clickValue;
     Toast mToastText = null;
     Timer timer = new Timer();
 
+    public static final int timeToZero = 10; // [s]
+    public static final int maxClick = 5;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,16 +39,28 @@ public class MainService extends Service {
             mToastText = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
         }
 
-        this.clickValue = intent.getIntExtra("clickValue", 0);
-        Log.v("MainService", "got call");
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(),"timeLastClicked");
+
+                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
+                    MainService.this.stopSelf();
+                }
+            }
+        }, 2000*timeToZero);
 
 
-        if (this.clickValue == 0) {
-                 displayText("" + NihtaftiActivity.maxClick);
-            Log.v("MainService", "" + NihtaftiActivity.maxClick);
+        clickValue = intent.getIntExtra("clickValue", 0);
+
+        if (clickValue >= maxClick) {
+            startAction = true;
+            startToWork();
         } else {
-                    displayText("" + (NihtaftiActivity.maxClick - clickValue));
-            Log.v("MainService","" + (NihtaftiActivity.maxClick - clickValue));
+            displayText("" + (maxClick - clickValue));
+
         }
 
 
@@ -54,9 +69,17 @@ public class MainService extends Service {
         return START_STICKY;
     }
 
+    //this method display the toast
     private void displayText(final String message) {
-
         mToastText.setText(message);
         mToastText.show();
     }
+
+    //this method start the actions the the app do when someone kidnapped
+    private void startToWork() {
+
+    }
+
+
+
 }
