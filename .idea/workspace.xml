@@ -32,7 +32,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fcccd6e-578a-452d-9a67-1e581b4c90d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/isrtk/nihtfti/MainService.java" afterPath="$PROJECT_DIR$/src/com/isrtk/nihtfti/MainService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="nihtafti2.iws" />
@@ -451,7 +450,11 @@
       <created>1403249246268</created>
       <updated>1403249246268</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Clean Version with  Service and Counter + Silent mode&#10;">
+      <created>1403250114609</created>
+      <updated>1403250114609</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
