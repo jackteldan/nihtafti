@@ -51,7 +51,11 @@ public class MainService extends Service {
                 Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(),"timeLastClicked");
 
                 if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
-                    MainService.this.stopSelf();
+                	 displayText("המונה התאפס-עברו 10 שניות");
+                     remoteViews.setTextViewText(R.id.widget_image, "נחטפתי! \n לחץ 6X להפעלה");
+                     WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+
+                	MainService.this.stopSelf();
                 }
             }
         }, 2000*timeToZero);
@@ -77,14 +81,16 @@ public class MainService extends Service {
     private void displayText(final String message) {
         mToastText.setText(message);
         mToastText.show();
-        remoteViews.setTextViewText(R.id.widget_image, " עוד " + (maxClick - clickValue)+"X"+" לחיצות לאזעקת עזרה ");
+        remoteViews.setTextViewText(R.id.widget_image,"נחטפתי! \n"+ " עוד " + (maxClick - clickValue)+"X");
         WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
 
     }
 
     //this method start the actions the the app do when someone kidnapped
     private void startToWork() {
-        displayText("BOOM!!!!!");
+        displayText(" הפעלה מערכת העזהקה");
+        remoteViews.setTextViewText(R.id.widget_image, " הופעלה מערכת העזהקה");
+        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
         
     }
 
