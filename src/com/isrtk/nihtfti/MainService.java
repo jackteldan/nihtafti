@@ -2,9 +2,11 @@ package com.isrtk.nihtfti;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -18,10 +20,15 @@ public class MainService extends Service {
     int clickValue;
     Toast mToastText = null;
     Timer timer = new Timer();
+    RemoteViews remoteViews;
 
     public static final int timeToZero = 10; // [s]
     public static final int maxClick = 5;
 
+    public MainService() {
+        Log.v("MainService", "Created!!!!!");
+
+    }
     @Override
     public IBinder onBind(Intent intent) {
         //TODO for communication return IBinder implementation
@@ -29,38 +36,28 @@ public class MainService extends Service {
             return null;
     }
 
-
-
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (mToastText == null) {
             Log.v("MainService", "Created");
             mToastText = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+            remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
         }
 
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(),"timeLastClicked");
-
-                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
-                    MainService.this.stopSelf();
-                }
-            }
-        }, 2000*timeToZero);
+        closeServiceIfNoAction();
 
 
         clickValue = intent.getIntExtra("clickValue", 0);
 
-        if (clickValue >= maxClick) {
-            startAction = true;
-            startToWork();
+        if (clickValue >= maxClick ) {
+            if (!startAction) {
+                startToWork();
+                startAction = true;
+            }
         } else {
-            displayText("" + (maxClick - clickValue));
-
+            displayText(" ��� " + (maxClick - clickValue)+" ������ ������ ���� ");
         }
 
 
@@ -69,17 +66,44 @@ public class MainService extends Service {
         return START_STICKY;
     }
 
+    private void closeServiceIfNoAction() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(), "timeLastClicked");
+
+                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
+                    MainService.this.stopSelf();
+                }
+            }
+        }, 2000*timeToZero);
+    }
+
     //this method display the toast
     private void displayText(final String message) {
         mToastText.setText(message);
         mToastText.show();
+        remoteViews.setTextViewText(R.id.widget_image,"������! \n"+ " ��� " + (maxClick - clickValue)+"X");
+        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+
     }
 
     //this method start the actions the the app do when someone kidnapped
     private void startToWork() {
+        displayText(" ����� ����� ������");
+        remoteViews.setTextViewText(R.id.widget_image, " ������ ����� ������");
+        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+
+
+        putSilentMode();
 
     }
 
+    private void putSilentMode() {
+        AudioManager am = (AudioManager) getBaseContext().getSystemService(this.AUDIO_SERVICE);
+        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+    }
 
 
 }
