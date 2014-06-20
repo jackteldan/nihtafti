@@ -6,7 +6,7 @@
 
     <Button
         android:id="@+id/widget_image"
-        android:text="נחטפתי!&#10; לחץ להפעלה"
+        android:text="S.O.S &#10;לחץ 6X להפעלה"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         style="@style/button_text"

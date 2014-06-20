@@ -57,7 +57,9 @@ public class MainService extends Service {
                 startAction = true;
             }
         } else {
-            displayText(" ��� " + (maxClick - clickValue)+" ������ ������ ���� ");
+            displayText(" לחץ " + (maxClick - clickValue)+"לחץ עוד  ");
+            remoteViews.setTextViewText(R.id.widget_image,"S.O.S\n"+ "עוד " + (maxClick - clickValue)+"X"+" לחיצות");
+            WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
         }
 
 
@@ -75,6 +77,9 @@ public class MainService extends Service {
 
                 if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
                     MainService.this.stopSelf();
+                    displayText("עברו 10 שניות - הספרה התאפסה");
+                    remoteViews.setTextViewText(R.id.widget_image, "S.O.S\n"+"לחץ 6X להפעלה");
+                    WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
                 }
             }
         }, 2000*timeToZero);
@@ -84,15 +89,14 @@ public class MainService extends Service {
     private void displayText(final String message) {
         mToastText.setText(message);
         mToastText.show();
-        remoteViews.setTextViewText(R.id.widget_image,"������! \n"+ " ��� " + (maxClick - clickValue)+"X");
-        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+       
 
     }
 
     //this method start the actions the the app do when someone kidnapped
     private void startToWork() {
-        displayText(" ����� ����� ������");
-        remoteViews.setTextViewText(R.id.widget_image, " ������ ����� ������");
+        displayText("האזעקה הופעלה");
+        remoteViews.setTextViewText(R.id.widget_image, "העזהקה הופעלה");
         WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
 
 
