@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
         android:id="@+id/widget_image"
-        android:src="@drawable/ic_launcher"/>
+        android:text="נחטפתי!&#10; לחץ להפעלה"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@style/button_text"
+       android:background="@drawable/red_background"
+></Button>
 </LinearLayout>

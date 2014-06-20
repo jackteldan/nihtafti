@@ -2,7 +2,6 @@ package com.isrtk.nihtfti;
 
 import android.app.Service;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -23,10 +22,6 @@ public class MainService extends Service {
     public static final int timeToZero = 10; // [s]
     public static final int maxClick = 5;
 
-    public MainService() {
-        Log.v("MainService", "Created!!!!!");
-
-    }
     @Override
     public IBinder onBind(Intent intent) {
         //TODO for communication return IBinder implementation
@@ -34,47 +29,44 @@ public class MainService extends Service {
             return null;
     }
 
+
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         if (mToastText == null) {
             Log.v("MainService", "Created");
             mToastText = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
         }
 
 
-        closeServiceIfNoAction();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(),"timeLastClicked");
+
+                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
+                    MainService.this.stopSelf();
+                }
+            }
+        }, 2000*timeToZero);
 
 
         clickValue = intent.getIntExtra("clickValue", 0);
 
-        if (clickValue >= maxClick ) {
-            if (!startAction) {
-                startToWork();
-                startAction = true;
-            }
+        if (clickValue >= maxClick) {
+            startAction = true;
+            startToWork();
         } else {
             displayText("" + (maxClick - clickValue));
+
         }
 
 
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
-    }
-
-    private void closeServiceIfNoAction() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(), "timeLastClicked");
-
-                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
-                    MainService.this.stopSelf();
-                }
-            }
-        }, 2000*timeToZero);
     }
 
     //this method display the toast
@@ -86,14 +78,8 @@ public class MainService extends Service {
     //this method start the actions the the app do when someone kidnapped
     private void startToWork() {
 
-        putSilentMode();
-
     }
 
-    private void putSilentMode() {
-        AudioManager am = (AudioManager) getBaseContext().getSystemService(this.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-    }
 
 
 }
