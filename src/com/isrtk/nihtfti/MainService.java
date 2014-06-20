@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -18,6 +20,7 @@ public class MainService extends Service {
     int clickValue;
     Toast mToastText = null;
     Timer timer = new Timer();
+    RemoteViews remoteViews;
 
     public static final int timeToZero = 10; // [s]
     public static final int maxClick = 5;
@@ -37,6 +40,7 @@ public class MainService extends Service {
         if (mToastText == null) {
             Log.v("MainService", "Created");
             mToastText = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+            remoteViews = new RemoteViews(getPackageName(), R.layout.widget); 
         }
 
 
@@ -59,8 +63,8 @@ public class MainService extends Service {
             startAction = true;
             startToWork();
         } else {
-            displayText("" + (maxClick - clickValue));
-
+            displayText(" עוד " + (maxClick - clickValue)+" לחיצות לאזעקת עזרה ");
+           
         }
 
 
@@ -73,11 +77,15 @@ public class MainService extends Service {
     private void displayText(final String message) {
         mToastText.setText(message);
         mToastText.show();
+        remoteViews.setTextViewText(R.id.widget_image, " עוד " + (maxClick - clickValue)+"X"+" לחיצות לאזעקת עזרה ");
+        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+
     }
 
     //this method start the actions the the app do when someone kidnapped
     private void startToWork() {
-
+        displayText("BOOM!!!!!");
+        
     }
 
 
