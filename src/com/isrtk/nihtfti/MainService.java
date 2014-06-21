@@ -76,10 +76,11 @@ public class MainService extends Service {
                 Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(), "timeLastClicked");
 
                 if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
-                    MainService.this.stopSelf();
+                  
                     displayText("עברו 10 שניות - הספרה התאפסה");
                     remoteViews.setTextViewText(R.id.widget_image, "S.O.S\n"+"לחץ 6X להפעלה");
                     WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+                    MainService.this.stopSelf();
                 }
             }
         }, 2000*timeToZero);
