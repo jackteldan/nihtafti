@@ -45,8 +45,6 @@ public class MainService extends Service {
         }
 
         closeServiceIfNoAction();
-        SendSms.sendMessage(getApplicationContext(), "בדיקה");
-
 
         clickValue = intent.getIntExtra("clickValue", 0);
 
@@ -100,6 +98,8 @@ public class MainService extends Service {
         WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
 
         putSilentMode();
+
+        SendSms.sendMessage(getApplicationContext(), "בדיקה");
 
     }
 
