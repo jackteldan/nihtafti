@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import com.isrtk.methods.SendSms;
 
 import java.util.Timer;
 
@@ -26,7 +27,7 @@ public class MainService extends Service {
     public static final int maxClick = 5;
 
     public MainService() {
-        Log.v("MainService", "Created!!!!!");
+
 
     }
     @Override
@@ -38,15 +39,13 @@ public class MainService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         if (mToastText == null) {
-            Log.v("MainService", "Created");
             mToastText = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
             remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
         }
 
-
         closeServiceIfNoAction();
+        SendSms.sendMessage(getApplicationContext(), "בדיקה");
 
 
         clickValue = intent.getIntExtra("clickValue", 0);
@@ -77,8 +76,7 @@ public class MainService extends Service {
 
                 if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
                     MainService.this.stopSelf();
-                    displayText("עברו 10 שניות - הספרה התאפסה");
-                    remoteViews.setTextViewText(R.id.widget_image, "S.O.S\n"+"לחץ 6X להפעלה");
+                    remoteViews.setTextViewText(R.id.widget_image, getResources().getString(R.string.widget_first_text));
                     WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
                 }
             }
@@ -95,10 +93,11 @@ public class MainService extends Service {
 
     //this method start the actions the the app do when someone kidnapped
     private void startToWork() {
-        displayText("האזעקה הופעלה");
-        remoteViews.setTextViewText(R.id.widget_image, "העזהקה הופעלה");
-        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
 
+        displayText(getResources().getString(R.string.alarm_activated));
+
+        remoteViews.setTextViewText(R.id.widget_image, getResources().getString(R.string.alarm_activated));
+        WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
 
         putSilentMode();
 
