@@ -5,26 +5,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * Created by Avi on 19/06/2014.
  */
 public class WidgetIntentReceiver extends BroadcastReceiver {
 
-    private static int clickCount = 0;
+    public static Toast mToastText;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.v("WidgetIntentReceiver" , "RECIVED");
 
-        Intent intent2 = new Intent(context, NihtaftiActivity.class);
-        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent2);
+        if (intent.getAction().equals("pl.looksok.intent.action.CHANGE_PICTURE")) {
 
-        //if(intent.getAction().equals("pl.looksok.intent.action.CHANGE_PICTURE")){
+            Log.v("WidgetIntentReceiver", "RECIVED");
+
+
+            Long timeLastClicked = DataHelper.contextReadLong(context.getApplicationContext(), "timeLastClicked");
+
+
+            if (timeLastClicked == 0) {
+                firstClick(context);
+            } else {
+                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
+                    firstClick(context);
+                } else {
+                    moreClick(context);
+                }
+            }
+
+
             updateWidgetPictureAndButtonListener(context);
-       // }
+        }
     }
+
 
     private void updateWidgetPictureAndButtonListener(Context context) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
@@ -37,8 +52,29 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
         WidgetProvider.pushWidgetUpdate(context.getApplicationContext(), remoteViews);
     }
 
-   // private int getImageToSet() {
-    //    clickCount++;
-   //     return clickCount % 2 == 0 ? R.drawable.me : R.drawable.wordpress_icon;
- //   }
+    private void firstClick(Context context) {
+
+        DataHelper.contextWriteLong(context.getApplicationContext(), "timeLastClicked", System.currentTimeMillis());
+        DataHelper.contextWriteInt(context.getApplicationContext(), "clickValue", 0);
+
+        Intent newIntent = new Intent(context.getApplicationContext(), MainService.class);
+        newIntent.putExtra("clickValue", 0);
+        context.startService(newIntent);
+
+
+    }
+
+    private void moreClick(Context context) {
+
+        int clickValue = DataHelper.contextReadInt(context.getApplicationContext(), "clickValue");
+        DataHelper.contextWriteInt(context.getApplicationContext(), "clickValue", clickValue + 1);
+        DataHelper.contextWriteLong(context.getApplicationContext(), "timeLastClicked", System.currentTimeMillis());
+
+        Intent newIntent = new Intent(context.getApplicationContext(), MainService.class);
+        newIntent.putExtra("clickValue", clickValue + 1);
+        context.startService(newIntent);
+
+    }
+
+
 }

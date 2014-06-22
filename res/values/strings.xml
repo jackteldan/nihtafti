@@ -1,5 +1,12 @@
 <resources>
 
     <string name="app_name">ניחטפתי!</string>
+    <string name="alarm_activated">האזעקה הופעלה</string>
+    <string name="widget_first_text">
+ S.O.S \n
+                לחץ 5 לחיצות להפעלה
+    </string>
+      <string name="SOS">S.O.S</string>
+
 
 </resources>

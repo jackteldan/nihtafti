@@ -20,10 +20,9 @@ package com.isrtk.nihtfti;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ComponentName;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -35,11 +34,10 @@ public class WidgetProvider extends AppWidgetProvider {
                          int[] appWidgetIds) {
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-        remoteViews.setOnClickPendingIntent(R.id.widget_image, buildButtonPendingIntent(context));
 
         pushWidgetUpdate(context, remoteViews);
 
-        Log.v("PROVICER", "onUpdate");
+        Log.v("PROVIDER", "onUpdate");
 
     }
 
@@ -50,6 +48,7 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {
+        remoteViews.setOnClickPendingIntent(R.id.widget_image, buildButtonPendingIntent(context));
         ComponentName myWidget = new ComponentName(context, WidgetProvider.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         manager.updateAppWidget(myWidget, remoteViews);
