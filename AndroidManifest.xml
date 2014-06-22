@@ -39,9 +39,6 @@
                 <action android:name="pl.looksok.intent.action.CHANGE_PICTURE" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_provider" />
         </receiver>
 
         <service
