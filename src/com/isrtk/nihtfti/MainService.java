@@ -24,7 +24,7 @@ public class MainService extends Service {
     RemoteViews remoteViews;
 
     public static final int timeToZero = 10; // [s]
-    public static final int maxClick = 5;
+    public static final int maxClick = 4;
 
     public MainService() {
 
@@ -74,11 +74,15 @@ public class MainService extends Service {
 
                 if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
 
-                    MainService.this.stopSelf();
                     remoteViews.setTextViewText(R.id.widget_image, getResources().getString(R.string.widget_first_text));
-
                     WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
-                    MainService.this.stopSelf();
+
+                    try {
+                        MainService.this.stopSelf();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }, 2000*timeToZero);

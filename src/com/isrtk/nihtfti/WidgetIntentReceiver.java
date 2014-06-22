@@ -37,8 +37,5 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
         WidgetProvider.pushWidgetUpdate(context.getApplicationContext(), remoteViews);
     }
 
-   // private int getImageToSet() {
-    //    clickCount++;
-   //     return clickCount % 2 == 0 ? R.drawable.me : R.drawable.wordpress_icon;
- //   }
+
 }
