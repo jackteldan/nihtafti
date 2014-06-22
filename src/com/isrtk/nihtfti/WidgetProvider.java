@@ -34,7 +34,6 @@ public class WidgetProvider extends AppWidgetProvider {
                          int[] appWidgetIds) {
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-        remoteViews.setOnClickPendingIntent(R.id.widget_image, buildButtonPendingIntent(context));
 
         pushWidgetUpdate(context, remoteViews);
 
@@ -49,6 +48,7 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     public static void pushWidgetUpdate(Context context, RemoteViews remoteViews) {
+        remoteViews.setOnClickPendingIntent(R.id.widget_image, buildButtonPendingIntent(context));
         ComponentName myWidget = new ComponentName(context, WidgetProvider.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         manager.updateAppWidget(myWidget, remoteViews);
