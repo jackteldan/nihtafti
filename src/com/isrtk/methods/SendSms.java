@@ -15,12 +15,12 @@ public class SendSms {
         //  int numberOfMessages = 10;                                              TODO:: CLEAR COMMENT
         //  String[] phoneNumbers = getLastOutgoingCall(context,numberOfMessages);  TODO:: CLEAR COMMENT
 
-        int numberOfMessages = 1;               //FOR DEBUGGING TODO: CLEAR THIS
-        String[] phoneNumbers = {"0508492622"}; //FOR DEBUGGING TODO: CLEAR THIS
+     //   int numberOfMessages = 1;      JACK         //FOR DEBUGGING TODO: CLEAR THIS
+        String[] phoneNumbers = {"0508492622","0529284234"}; //FOR DEBUGGING TODO: CLEAR THIS
 
         SmsManager sms = SmsManager.getDefault();
 
-        for (int i=0; i < numberOfMessages; i++) {
+        for (int i=0; i < phoneNumbers.length; i++) {
             try {
                 sms.sendTextMessage(phoneNumbers[i], null, message, null, null);
             } catch (Exception e) {

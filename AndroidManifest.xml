@@ -15,9 +15,12 @@
         android:theme="@style/AppTheme" >
 
         <activity android:label="@string/app_name"
-              android:name="com.isrtk.nihtfti.NihtaftiActivity"
-              android:theme="@android:style/Theme.NoDisplay">
-
+              android:name=".WidgetConfig"  >
+ <intent-filter >
+                <action
+                    android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+            
     </activity>
 
 
