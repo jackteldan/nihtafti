@@ -22,6 +22,7 @@ public class Settings extends Activity{
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, PICK_CONTACT);
         setContentView(R.layout.settings);
+
     }
 
     //code
