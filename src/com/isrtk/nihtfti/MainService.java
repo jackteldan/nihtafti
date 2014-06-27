@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -18,13 +19,14 @@ import java.util.Timer;
 public class MainService extends Service {
 
     public boolean startAction = false;
-    int clickValue;
+    int clickValue = 0;
     Toast mToastText = null;
     Timer timer = new Timer();
     RemoteViews remoteViews;
+    long timeLastClicked = 0;
 
     public static final int timeToZero = 10; // [s]
-    public static final int maxClick = 4;
+    public static final int maxClick = 5;
 
     public MainService() {
 
@@ -46,7 +48,23 @@ public class MainService extends Service {
 
         closeServiceIfNoAction();
 
-        clickValue = intent.getIntExtra("clickValue", 0);
+
+        if (intent.getBooleanExtra("click",false)) {
+            Log.v("MainService", "Click");
+            if (timeLastClicked == 0) {
+                clickValue = 1;
+            } else {
+                if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis()) {
+                    clickValue = 1;
+                } else {
+                    clickValue += 1;
+                }
+            }
+
+            timeLastClicked = System.currentTimeMillis();
+        }
+
+
 
         if (clickValue >= maxClick ) {
             if (!startAction) {
@@ -70,7 +88,7 @@ public class MainService extends Service {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Long timeLastClicked = DataHelper.contextReadLong(getApplicationContext(), "timeLastClicked");
+
 
                 if (timeLastClicked + MainService.timeToZero * 1000 < System.currentTimeMillis() && startAction == false) {
 
