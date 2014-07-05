@@ -48,8 +48,8 @@ public class MainService extends Service {
 
         closeServiceIfNoAction();
 
-
-        if (intent.getBooleanExtra("click",false)) {
+        Boolean click = intent.getBooleanExtra("click",false);
+        if (click != null && click) {
             Log.v("MainService", "Click");
             if (timeLastClicked == 0) {
                 clickValue = 1;
@@ -61,21 +61,25 @@ public class MainService extends Service {
                 }
             }
 
+
             timeLastClicked = System.currentTimeMillis();
-        }
 
-
-
-        if (clickValue >= maxClick ) {
-            if (!startAction) {
-                startToWork();
-                startAction = true;
+            if (clickValue >= maxClick ) {
+                if (!startAction) {
+                    startToWork();
+                    startAction = true;
+                }
+            } else {
+                displayText(" לחץ " + (maxClick - clickValue)+"לחץ עוד  ");
+                remoteViews.setTextViewText(R.id.widget_image,"S.O.S\n"+ "עוד " + (maxClick - clickValue)+"X"+" לחיצות");
+                WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
             }
-        } else {
-            displayText(" לחץ " + (maxClick - clickValue)+"לחץ עוד  ");
-            remoteViews.setTextViewText(R.id.widget_image,"S.O.S\n"+ "עוד " + (maxClick - clickValue)+"X"+" לחיצות");
-            WidgetProvider.pushWidgetUpdate(getApplicationContext(), remoteViews);
+
         }
+
+
+
+
 
 
         // We want this service to continue running until it is explicitly

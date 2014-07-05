@@ -7,6 +7,12 @@
                 לחץ 5 לחיצות להפעלה
     </string>
       <string name="SOS">S.O.S</string>
+    <string name="set_numbers">הגדר מספרים לשיחה:</string>
+    <string name="pref_send_last_calls">רשימת טלפונים אוטומטית</string>
+    <string name="pref_send_last_calls_des">
+האפליקציה תשלח הודעה ל-10 אנשי קשר אחרונים איתם בוצעה שיחה טלפונית	</string>
+    <string name="pref_number_1">מספר 1</string>
+    <string name="number">מספר</string>
 
 
 </resources>
